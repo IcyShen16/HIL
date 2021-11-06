@@ -106,8 +106,6 @@ def simuQueue(customers, drivers, fleet, matchPolicy):
         raise Exception("\n We did not finish all customers' request we care about, please increase m or n or change the customers we care about !!!!!!\n")
 
     EW = customers.computeMeasure("QS")
-
-    customers.customers.to_csv(conf.dataPath + "m{}_n{}.csv".format(m, n))
     return EW
 
 
