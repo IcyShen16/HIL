@@ -1,8 +1,10 @@
-from Comparison import  tsFleetSize
+from Comparison import  tsFleetSize, hilNumDrivers
 
 
 def main():
-    tsFleetSize("LS")
+    # tsFleetSize("LS", "FD")
+    # tsFleetSize("QS", "FD")
+    hilNumDrivers(100, "QS", "FD")
 
 
 if __name__ == "__main__":

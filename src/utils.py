@@ -30,15 +30,16 @@ def localPlot(x, y, xlabel, ylabel, title, legends, xlim, ylim, SaveorNot=False,
     n = y.shape[0]
     if n > 1:
         for i in range(n):
-            plt.plot(x, y[i, :], label=legends[i])
+            plt.plot(x[0, :], y[i, :], label=legends[i])
         plt.legend()
     else:
-        plt.plot(x, y)
+        plt.plot(x[0, :], y[0, :])
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.title(title)
     plt.xlim(left=xlim[0], right=xlim[1])
     plt.ylim(bottom=ylim[0], top=ylim[1])
+    plt.grid()
     if SaveorNot:
         plt.savefig(filePath)
     else:

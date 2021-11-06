@@ -3,7 +3,7 @@ from MatchPolicy import FD, NN
 from utils import haversine_point_to_vector_distance
 from tqdm import tqdm
 
-def simuLoss(customers, drivers, fleet):
+def simuLoss(customers, drivers, fleet, matchPolicy=None):
     # simulate the loss system: different matching policies (FD, NN) are reduced to the same one
     for t in tqdm(range(conf.totalTime)):
         cur_customers_IDs, cur_customers_locations = customers.arrivingCustomer(t)
