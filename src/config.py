@@ -13,3 +13,5 @@ countStartTime = (datetime.strptime(pickedDayStr + "11:00:00", datetimeFormat) -
 countEndTime = (datetime.strptime(pickedDayStr + "13:00:00", datetimeFormat) - startTime).seconds
 
 totalTime = (endTime - startTime).seconds - 1
+
+LinearSpeed = 20

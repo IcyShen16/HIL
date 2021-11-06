@@ -1,5 +1,7 @@
 import config as conf
 import pandas as pd
+import numpy as np
+
 
 def fitSystem(m, n):
     # read date
@@ -12,13 +14,25 @@ def fitSystem(m, n):
     df["dropoff_seconds"] = (df.dropoff_datetime - conf.startTime).dt.total_seconds()
     df["duration"] =( df.dropoff_datetime - df.pickup_datetime).dt.total_seconds()
 
-    df = df.astype({"arrival_time":"int64", "dropoff_seconds":"int64", "duration": "int64"})
 
-    startIndex = df.loc[df.pickup_datetime == conf.startTime, :].index[0]
+
+    startIndex = df.loc[df.arrival_time == 0, :].index[0]
+
     vehicleInitData = df.loc[startIndex - m:startIndex-1, ['dropoff_lon', 'dropoff_lat','dropoff_seconds']].values
     driverInitData = df.loc[startIndex - n:startIndex - 1, ['dropoff_seconds']].values
-    df.index = df.pickup_seconds
-    dfSub = df.loc[startIndex:, ["arrival_time", 'duration', 'pickup_lon', 'pickup_lat','dropoff_lon', 'dropoff_lat']]
+    if m > n:
+        # if the number of vehicles is strictly greater than the number of drivers
+        # then at the beginning, we have at least m-n vehicles availables
+        # so here we set the first m-n vehicles with least first free time as the idle vehicles at the beginning of the simulation
+        FFTindex = np.argpartition(vehicleInitData[:, 2], m-n)
+        vehicleInitData[FFTindex[:m-n], 2] = 0
+
+    dfSub = df.loc[startIndex:, :]
+    dfSub.reset_index(drop=True, inplace=True)
+    dfSub.loc[:, "id"] = range(len(dfSub))
+    dfSub = dfSub.astype({"arrival_time": "int64", "dropoff_seconds": "int64", "duration": "int64", "id":"int64"})
+    dfSub = dfSub[["arrival_time", 'duration', 'pickup_lon', 'pickup_lat','dropoff_lon', 'dropoff_lat', "id"]]
+
     return dfSub, vehicleInitData, driverInitData
 
 

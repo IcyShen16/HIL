@@ -34,9 +34,19 @@ General parameters
 #### Initial system (initSys):  
 assume the number of vehicles is $m$ and the number of drivers is $n$. Use the $m$ arrival before startTime as the initial states (dropoff locations as the location of vehicles, the dropoff time as the times the vehicles/drivers become available.), then the number of idle vehicles/drivers is less than or equal to $m$($n$). 
 
+#### Matching policy:
+NN: choose the matching with the smallest total distance
+NNwithOrder: According to some order (waiting time), assign the first customers the nearest vehicle, the second customers the nearest vehicle among the remaining vehicles
+FD: first dispatch policy; 
 #### Simulation(simuLoss, simuQueue): 
 
-every second, we check the customers in the system (arrive at or before this second and are not be served), then assign a free vehicle and driver to them according to the given matching policy (FD, NN). If it is FD, then we take the order of customers in the given data as the arrival order. So we stop the simulation at the second exactly before 14:00 pm. If it is NN, we stop the simulation when all of the customers (arrives to the system from startTime to endTime) are served 
+every second, we check the customers in the system (arrive at or before this second and are not be served), then assign a free vehicle and driver to them according to the given matching policy (FD, NN). 
+For simuLoss, FD and NN are reduced to the same one; Every second, we query the customers waiting in the system, idle vehicles, and idle drivers, and choose NN as matching policy.
+
+
+For simuQueue, Nearest Neighbor every time, we check the customers waiting in the system, idle vehicles, and idle drivers and then choose the NNwithOrder
+FD: if the number of waiting customers c is less than the number of idle drivers n, then it reduced to NNwithOrder; 
+Otherwise, we can only serve n customers. Then it is still NNwithOrder with first n customers   
 #### Service level: 
 
 we use the customers arriving to the system from 11:00 am - 13:00pm as the effective arrivals. We query the number of served arrivals among all of the effective arrivals from 10:00 am -13:pm and use the ratio as the service level. 
