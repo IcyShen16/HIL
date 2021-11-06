@@ -98,6 +98,7 @@ def simuQueue(customers, drivers, fleet, matchPolicy):
                         drivers.update(t)
                         fleet.update(t)
             if customers.effCusCheck():
+                print("We finish all requests we care about at {}, so let's stop early\n".format(t))
                 break
 
 
