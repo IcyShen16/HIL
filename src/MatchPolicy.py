@@ -37,14 +37,15 @@ def NNwithOrder(curCusLocation, curVehiLocation, curDriverID, curVehiID, curCusI
         return [curCusID[0]], [curVehiID[min_dis_index]], [distance_vector.min()]
     else:
         distance_matrix = haversine_multipoint_to_vector_distance(curCusLocation, curVehiLocation)
-        finalVehicleID = np.zeros(c)
-        distance = np.zeros(c)
-        for i in range(c):
+        minNum = min(n, m, c)
+        finalVehicleID = np.zeros(minNum)
+        distance = np.zeros(minNum)
+        for i in range(minNum):
             index = distance_matrix[i, :].argmin()
             finalVehicleID[i] = curVehiID[index]
             distance[i] = distance_matrix[i, index]
             distance_matrix[:, index] = _MAX_DISTANCE
-        return curCusID, finalVehicleID, distance
+        return curCusID[:minNum], finalVehicleID, distance
 
 
 def NN(curCusLocation, curVehiLocation, curDriverID, curVehiID, curCusID):

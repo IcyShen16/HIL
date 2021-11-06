@@ -48,13 +48,21 @@ class CUSTOMERS:
         self.customers.loc[need_to_update_index, "state"] = 2
         self.customers.loc[need_to_update_index, "waiting_time"] = currentTime - self.customers.loc[need_to_update_index, "arrival_time"]
 
+    def effCusCheck(self):
+        effCusIndex = (self.customers.arrival_time >= conf.countStartTime) & (self.customers.arrival_time <= conf.countEndTime) & (self.customers.state != 1)
+        if sum(effCusIndex) > 0:
+            return False
+        else:
+            return True
+
     def computeMeasure(self, Dtype):
-        effCus = self.customers.loc[range(conf.countStartTime, conf.countEndTime), :]
+        effCusIndex = (self.customers.arrival_time >= conf.countStartTime) & (self.customers.arrival_time <= conf.countEndTime)
+        effCus = self.customers.loc[effCusIndex, :]
         if Dtype == "LS":
             numServed = sum(effCus.state == 1)
             return numServed / len(effCus)
         elif Dtype == "QS":
-            return effCus.waiting_time.mean()
+            return effCus.waiting_time.mean()/60.
         else:
             raise Exception("\n error @ CUSTOMERS: computeMeasure---> wrong Dtype = {}!\n".format(Dtype))
 

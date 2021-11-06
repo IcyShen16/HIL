@@ -13,20 +13,19 @@ def tsFleetSize(SysType, DP):
         SysSimu = globals()["simuLoss"]
         measurePer = "SL"
         FleetSizeVector = list(range(100, 2000, 100))
-        tmp = list(range(2000, 5000, 300))
-        FleetSizeVector = [*FleetSizeVector, *tmp]
-        tmp = list(range(5000, 8000, 500))
+        tmp = list(range(2000, 3000, 200))
         FleetSizeVector = np.array([*FleetSizeVector, *tmp])
     elif SysType == "QS":
         SysSimu = globals()["simuQueue"]
         measurePer = "EW"
-        FleetSizeVector = list(range(100, 2000, 100))
-        # tmp = list(range(2000, 5000, 300))
-        # FleetSizeVector = [*FleetSizeVector, *tmp]
-        # tmp = list(range(5000, 8000, 500))
-        # FleetSizeVector = np.array([*FleetSizeVector, *tmp])
+        FleetSizeVector = list(range(500, 1000, 300))
+        tmp = list(range(1000, 3000, 200))
+        FleetSizeVector = [*FleetSizeVector, *tmp]
+        tmp = list(range(3000, 4000, 100))
+        FleetSizeVector = np.array([*FleetSizeVector, *tmp])
     else:
         raise Exception("\n error @ tsFleetSize: wrong SysType={} \n".format(SysType))
+
     Results = np.zeros(len(FleetSizeVector))
     df_cus, vehicleInitData, driverInitData = fitSystem(0, 0)
     oriCustomers = CUSTOMERS(df_cus, SysType)
