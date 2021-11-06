@@ -68,7 +68,7 @@ def simuQueue(customers, drivers, fleet, matchPolicy):
                     drivers.update(t)
                     fleet.update(t)
     if not customers.effCusCheck():
-        print("\n we still have some unserved customers and we care about them, so we extend the time period\n")
+        print("\n we still have some unserved customers and we care about them, so we extend the time period to the whole day!\n")
         MaxTime = customers.customers.arrival_time.values.max()
         for t in tqdm(range(conf.totalTime, MaxTime+1)):
             cur_customers_IDs, cur_customers_locations = customers.waitingCustomers(t)
