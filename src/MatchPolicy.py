@@ -1,7 +1,7 @@
 from utils import haversine_multipoint_to_vector_distance, haversine_point_to_vector_distance
 import numpy as np
 from scipy import optimize
-
+import config as conf
 
 _MAX_DISTANCE = 10000
 
@@ -57,17 +57,21 @@ def NN(curCusLocation, curVehiLocation, curDriverID, curVehiID, curCusID):
 
     if m == 1:
         distance_vector = haversine_point_to_vector_distance(curVehiLocation, curCusLocation)
+        if (conf.MaxWaitingTime is not None) and (distance_vector.min() > conf.RadiusXY):
+            return [], [], []
         min_dis_index = distance_vector.argmin()
         return [curCusID[min_dis_index]], [curVehiID[0]], [distance_vector.min()]
     elif c == 1:
         distance_vector = haversine_point_to_vector_distance(curCusLocation, curVehiLocation)
+        if (conf.MaxWaitingTime is not None) and (distance_vector.min() > conf.RadiusXY):
+            return [], [], []
         min_dis_index = distance_vector.argmin()
         return [curCusID[0]], [curVehiID[min_dis_index]], [distance_vector.min()]
     else:
         # compute the distance between all customers and all vehicles
         distance_matrix = haversine_multipoint_to_vector_distance(curCusLocation, curVehiLocation)
-
-
+        if (conf.MaxWaitingTime is not None):
+            distance_matrix[distance_matrix > conf.RadiusXY]  = _MAX_DISTANCE
         # compute the min distance between customers and vehicles
         Cus_ind, Veh_ind = optimize.linear_sum_assignment(distance_matrix)
 
@@ -81,6 +85,11 @@ def NN(curCusLocation, curVehiLocation, curDriverID, curVehiID, curCusID):
             Cus_ind = Cus_ind[candidateIndex]
             Veh_ind = Veh_ind[candidateIndex]
             all_possible_distance = all_possible_distance[candidateIndex]
+            if (conf.MaxWaitingTime is not None):
+                final_index = all_possible_distance < _MAX_DISTANCE
+                Cus_ind = Cus_ind[final_index]
+                Veh_ind = Veh_ind[final_index]
+                all_possible_distance = all_possible_distance[final_index]
 
         Cus_Ids = curCusID[Cus_ind]
         Veh_IDs = curVehiID[Veh_ind]

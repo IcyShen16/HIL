@@ -26,14 +26,14 @@ def parsepara():
 
 
 def main():
-    SysType, DP, FleetSize = parsepara()
+    # SysType, DP, FleetSize = parsepara()
     # SysType, DP, FleetSize = "LS", "FD", 2000
-    if SysType == "LS":
-        if DP == "FD":
-            lsCompute(FleetSize)
-    # tsFleetSize("LS", "FD")
+    # if SysType == "LS":
+    #     if DP == "FD":
+    #         lsCompute(FleetSize)
+    tsFleetSize("LS", "FD")
     # tsFleetSize("QS", "FD")
-    # hilNumDrivers(100, "QS", "FD")
+    # hilNumDrivers(FleetSize, SysType, DP)
 
 
 if __name__ == "__main__":

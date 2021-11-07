@@ -12,8 +12,10 @@ def tsFleetSize(SysType, DP):
     if SysType == "LS":
         SysSimu = globals()["simuLoss"]
         measurePer = "SL"
-        FleetSizeVector = list(range(1000, 2000, 100))
-        tmp = list(range(2000, 2800, 50))
+        FleetSizeVector = list(range(100, 2000, 100))
+        tmp = list(range(2000, 3000, 200))
+        FleetSizeVector = np.array([*FleetSizeVector, *tmp])
+        tmp = list(range(3000, 3800, 50))
         FleetSizeVector = np.array([*FleetSizeVector, *tmp])
     elif SysType == "QS":
         SysSimu = globals()["simuQueue"]
@@ -40,6 +42,7 @@ def tsFleetSize(SysType, DP):
     ylim = [max(Results.min() - 0.1, 0), Results.max()+0.1]
     filePath = conf.dataPath + "tsFleetSize_{}_{}.png".format(SysType, DP)
     localPlot(FleetSizeVector.reshape(1, -1), Results.reshape(1, -1), "m", "service level", "{}-fleet size".format(SysType), None, xlim, ylim, True, filePath)
+    print(FleetSizeVector, Results)
     return FleetSizeVector, Results
 
 

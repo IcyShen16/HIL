@@ -6,6 +6,7 @@ fileName = dataPath + "{}_clean.csv".format(pickedDayStr)
 datetimeFormat = "%Y%m%d%H:%M:%S"
 
 
+
 startTime = datetime.strptime(pickedDayStr + "10:00:00", datetimeFormat)
 endTime = datetime.strptime(pickedDayStr + "14:00:00", datetimeFormat)
 
@@ -17,3 +18,6 @@ totalTime = (endTime - startTime).seconds - 1
 LinearSpeed = 20
 
 MinSL = 0.7
+
+MaxWaitingTime=5*60 # seconds
+RadiusXY = MaxWaitingTime / 3600 * LinearSpeed

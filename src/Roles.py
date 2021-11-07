@@ -14,7 +14,7 @@ class CUSTOMERS:
         self.customers.loc[:, ["response_time","pickup_time", "waiting_time", "state"]] = 0  # 0: coming. 1: served, 2: waiting/lost
 
     def arrivingCustomer(self, currentTime: int):
-        self.update(currentTime)
+        # self.update(currentTime)
         subDf = self.customers.loc[self.customers.arrival_time == currentTime, :]
         if len(subDf) > 0:
             IDs = subDf["id"]
@@ -56,12 +56,17 @@ class CUSTOMERS:
             return True
 
     def computeMeasure(self, Dtype):
-        effCusIndex = (self.customers.arrival_time >= conf.countStartTime) & (self.customers.arrival_time <= conf.countEndTime)
-        effCus = self.customers.loc[effCusIndex, :]
+
         if Dtype == "LS":
+            effCusIndex = (self.customers.arrival_time >= 0) & (
+                    self.customers.arrival_time <= conf.totalTime)
+            effCus = self.customers.loc[effCusIndex, :]
             numServed = sum(effCus.state == 1)
             return numServed / len(effCus)
         elif Dtype == "QS":
+            effCusIndex = (self.customers.arrival_time >= conf.countStartTime) & (
+                        self.customers.arrival_time <= conf.countEndTime)
+            effCus = self.customers.loc[effCusIndex, :]
             return effCus.waiting_time.mean()/60.
         else:
             raise Exception("\n error @ CUSTOMERS: computeMeasure---> wrong Dtype = {}!\n".format(Dtype))
