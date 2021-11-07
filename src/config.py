@@ -15,3 +15,5 @@ countEndTime = (datetime.strptime(pickedDayStr + "13:00:00", datetimeFormat) - s
 totalTime = (endTime - startTime).seconds - 1
 
 LinearSpeed = 20
+
+MinSL = 0.7

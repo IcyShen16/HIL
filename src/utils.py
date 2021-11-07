@@ -46,3 +46,9 @@ def localPlot(x, y, xlabel, ylabel, title, legends, xlim, ylim, SaveorNot=False,
         plt.show()
     plt.close()
 
+
+def savenpy(data, filename):
+    np.save(filename, np.array(data))
+
+def loadnpy(filename):
+    return np.load(filename)

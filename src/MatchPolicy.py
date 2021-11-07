@@ -75,7 +75,8 @@ def NN(curCusLocation, curVehiLocation, curDriverID, curVehiID, curCusID):
 
         # if the number of drivers is strictly less than the number of vehicles,
         # then we need to choose the min distance of all possible minimum distance as the final matching
-        if n < m:
+        if (n < m) and (len(all_possible_distance) > n):
+            # print(all_possible_distance, len(all_possible_distance), n, m, c)
             candidateIndex = np.argpartition(all_possible_distance, n)[:n] # smallest n distance index
             Cus_ind = Cus_ind[candidateIndex]
             Veh_ind = Veh_ind[candidateIndex]

@@ -29,6 +29,7 @@ def simuLoss(customers, drivers, fleet, matchPolicy=None):
                     drivers.update(t)
                     fleet.update(t)
     SL = customers.computeMeasure("LS")
+
     return SL
 
 

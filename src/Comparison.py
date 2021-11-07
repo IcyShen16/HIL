@@ -40,6 +40,7 @@ def tsFleetSize(SysType, DP):
     ylim = [max(Results.min() - 0.1, 0), Results.max()+0.1]
     filePath = conf.dataPath + "tsFleetSize_{}_{}.png".format(SysType, DP)
     localPlot(FleetSizeVector.reshape(1, -1), Results.reshape(1, -1), "m", "service level", "{}-fleet size".format(SysType), None, xlim, ylim, True, filePath)
+    return FleetSizeVector, Results
 
 
 def hilNumDrivers(fleetSize, SysType, DP):
@@ -68,3 +69,33 @@ def hilNumDrivers(fleetSize, SysType, DP):
     xlim = [min(numDriversVector)-10, max(numDriversVector)+10]
     ylim = [max(Results.min() -0.1, 0), Results.max()+0.1]
     localPlot(numDriversVector.reshape(1, -1), Results.reshape(1, -1), "n", measurePer, "{}-fleet size".format(SysType), None, xlim, ylim, True, filePath)
+    return numDriversVector, Results
+
+def computePerformance(fleetSize, SysType, DP):
+    if SysType == "LS":
+        SysSimu = globals()["simuLoss"]
+        measurePer = "SL"
+    elif SysType == "QS":
+        SysSimu = globals()["simuQueue"]
+        measurePer = "EW"
+    else:
+        raise Exception("\n error @ tsFleetSize: wrong SysType={} \n".format(SysType))
+    stepSize = 10
+    numDriversVector = np.array(list(reversed(range(1, fleetSize+1, stepSize))))
+    Results = np.zeros(len(numDriversVector))
+
+    df_cus, vehicleInitData, driverInitData = fitSystem(fleetSize, fleetSize)
+    oriCustomers = CUSTOMERS(df_cus, SysType)
+    FinalIndex = 0
+    for index, n in enumerate(numDriversVector):
+        customers = deepcopy(oriCustomers)
+        df_cus, vehicleInitData, driverInitData = fitSystem(fleetSize, n)
+        fleet = FLEET(vehicleInitData)
+        drivers = DRIVERS(driverInitData)
+        Results[index] = SysSimu(customers, drivers, fleet, DP)
+        print("m={}, n={}, {}={}".format(fleetSize, n, measurePer, Results[index]))
+        if Results[index] < conf.MinSL:
+            FinalIndex = index
+            break
+
+    return numDriversVector[:FinalIndex], Results[:FinalIndex]
