@@ -12,8 +12,8 @@ def tsFleetSize(SysType, DP):
     if SysType == "LS":
         SysSimu = globals()["simuLoss"]
         measurePer = "SL"
-        FleetSizeVector = list(range(100, 2000, 100))
-        tmp = list(range(2000, 3000, 200))
+        FleetSizeVector = list(range(1000, 2000, 100))
+        tmp = list(range(2000, 2800, 50))
         FleetSizeVector = np.array([*FleetSizeVector, *tmp])
     elif SysType == "QS":
         SysSimu = globals()["simuQueue"]
